@@ -21,15 +21,13 @@ export default function Layout({ children }: LayoutProps) {
     <div className="relative min-h-screen flex flex-col font-sans">
       {/* Video Background */}
       <div className="absolute inset-0 -z-10">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover brightness-[0.4]"
-        >
-          <source src="/video/bg-1.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
+        <video 
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="w-full h-220 object-cover backdrop-blur-sm">
+          <source src="/video/bg.mp4" type="video/mp4"/>
         </video>
       </div>
 
