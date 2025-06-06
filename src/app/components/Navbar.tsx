@@ -114,7 +114,7 @@ export default function Navbar() {
                         </li>
                     ) : (
                         <li>
-                            <Link href="/sign-in" onClick={() => setIsOpen(false)}>Login</Link>
+                            <Link href="/sign-in" className="cursor-pointer" onClick={() => setIsOpen(false)}>Login</Link>
                         </li>
                     )}
                 </ul>

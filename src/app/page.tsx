@@ -26,7 +26,7 @@ export default function Layout({ children }: LayoutProps) {
         muted
         loop
         playsInline
-        className="w-full h-220 object-cover backdrop-blur-sm">
+        className="w-full h-220 object-cover backdrop-blur-sm md:h-350">
           <source src="/video/bg.mp4" type="video/mp4"/>
         </video>
       </div>
