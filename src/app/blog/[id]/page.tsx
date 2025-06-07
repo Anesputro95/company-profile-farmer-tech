@@ -12,6 +12,11 @@ interface IBlogPost {
     thumbnail?: string;
 }
 
+interface IBlogDetailProps {
+    params: {
+        id: string | string[];
+    };
+}
 
 const BlogDetailPage = ({ params }: { params: { id: string } }) => {
     const router = useRouter();
