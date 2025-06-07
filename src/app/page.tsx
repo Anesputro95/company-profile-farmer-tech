@@ -62,7 +62,7 @@ export default function Layout({ children }: LayoutProps) {
 
           <div className="mt-10 flex justify-center">
             <Link href="/about-us" passHref>
-              <Button className="px-8 py-4 border border-emerald-400 text-emerald-300 rounded-full hover:bg-emerald-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-emerald-300/30">
+              <Button className="cursor-pointer px-8 py-4 border border-emerald-400 text-emerald-300 rounded-full hover:bg-emerald-500 hover:text-white transition-all duration-300 shadow-md hover:shadow-emerald-300/30">
                 Mulai Eksplorasi
               </Button>
             </Link>

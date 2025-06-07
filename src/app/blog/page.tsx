@@ -1,4 +1,4 @@
-"use client"; // untuk Next.js App Router
+"use client"; 
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -28,7 +28,8 @@ export default function BlogListPage() {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const res = await apiCall.get("/api/data/BlogPosts?sortBy=createdAt%20desc");
+                const res = await apiCall.get("/api/data/BlogPost?sortBy=createdAt%20desc");
+                console.log(res.data)
                 setBlogs(res.data);
             } catch (err) {
                 console.error(err);
@@ -69,32 +70,44 @@ export default function BlogListPage() {
                 {blogs.length === 0 ? (
                     <p className="text-center text-xl text-green-200 mt-20">Belum ada blog.</p>
                 ) : (
-                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10 relative top-12">
+                    <ul className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                         {blogs.map((blog) => (
-                            <Link key={blog.objectId} href={`/blog/${blog.objectId}`}>
-                                <li className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-transform duration-300 cursor-pointer">
-                                    {blog.thumbnail && (
-                                        <img
-                                            src={blog.thumbnail}
-                                            alt="Thumbnail"
-                                            className="w-full h-52 object-cover rounded-xl mb-4"
-                                        />
-                                    )}
-                                    <h2 className="text-2xl font-bold text-green-900 mb-2">{blog.title}</h2>
-                                    <p className="text-sm text-green-500 mb-4">
-                                        {new Date(blog.createdAt).toLocaleDateString("id-ID", {
-                                            year: "numeric",
-                                            month: "long",
-                                            day: "numeric",
-                                        })}
-                                    </p>
-                                    <p className="text-gray-700 leading-relaxed text-justify">
-                                        {blog.content.length > 250
-                                            ? blog.content.slice(0, 250) + "..."
-                                            : blog.content}
-                                    </p>
-                                </li>
-                            </Link>
+                            <li key={blog.objectId} className="group">
+                                <Link href={`/blog/${blog.objectId}`} className="block h-full">
+                                    <article className="bg-white rounded-2xl p-6 shadow-lg h-full flex flex-col 
+                                                        group-hover:shadow-xl group-hover:scale-[1.02] 
+                                                        transition-all duration-300 cursor-pointer relative top-4">
+                                        {blog.thumbnail && (
+                                            <figure className="mb-4 overflow-hidden rounded-xl">
+                                                <img
+                                                    src={blog.thumbnail}
+                                                    alt={blog.title || "Blog thumbnail"}
+                                                    className="w-full h-52 object-cover"
+                                                    loading="lazy"
+                                                />
+                                            </figure>
+                                        )}
+                                        
+                                        <div className="flex-grow">
+                                            <h2 className="text-2xl font-bold text-green-900 mb-2 line-clamp-2">
+                                                {blog.title}
+                                            </h2>
+
+                                            <time className="text-sm text-green-500 mb-4 block">
+                                                {new Date(blog.createdAt).toLocaleDateString("id-ID", {
+                                                    year: "numeric",
+                                                    month: "long",
+                                                    day: "numeric",
+                                                })}
+                                            </time>
+
+                                            <p className="text-gray-700 leading-relaxed line-clamp-4">
+                                                {blog.content}
+                                            </p>
+                                        </div>
+                                    </article>
+                                </Link>
+                            </li>
                         ))}
                     </ul>
                 )}

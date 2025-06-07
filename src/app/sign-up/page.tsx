@@ -152,7 +152,7 @@ export default function SignUpPage() {
                 </div>
                 <Button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200"
+                    className="cursor-pointer w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200"
                     onClick={btnSignUp}
                 >
                     Sign Up

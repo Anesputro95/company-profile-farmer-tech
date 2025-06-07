@@ -1,9 +1,8 @@
 import axios from "axios";
-import { headers } from "next/headers";
 
 export const APP_ID = 'A260B694-0680-4E28-B4F4-65F1C1D7F6DA';
 export const APP_KEY = 'C7021009-F160-45A1-B38F-FA1444A5C881';
-export const Base_URL_API: string = "https://upbeatsuggestion-us.backendless.app";
+export const Base_URL_API: string = "https://pivotalfire-us.backendless.app";
 
 export const apiCall = axios.create({
     baseURL: Base_URL_API,

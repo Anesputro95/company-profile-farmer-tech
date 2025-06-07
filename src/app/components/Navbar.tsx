@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { CircleUserRound, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
     const { userName, isLoggedIn, logout } = useAuth();
@@ -35,8 +36,9 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-50 bg-transparent backdrop-blur-sm bg-opacity-30 border-b border-white/10">
+        <nav className="fixed top-0 left-0 w-full z-50 bg-black/10 backdrop-blur-sm bg-opacity-30 border-b border-white/10">
             <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-14">
+
                 {/* Logo */}
                 <Link href="/" className="flex-shrink-0">
                     <Image src="/assets/logo.png" alt="Logo" width={40} height={40} />
@@ -44,9 +46,21 @@ export default function Navbar() {
 
                 {/* Menu Desktop */}
                 <ul className="hidden md:flex gap-6 text-green-500 text-sm font-medium">
-                    <li><Link href="/about-us">About Us</Link></li>
-                    <li><Link href="/service-product">Services</Link></li>
-                    <li><Link href="/blog">Blog</Link></li>
+                    <li>
+                        <Link href="/about-us" className="hover:text-white active:text-white border-b-2 border-transparent hover:border-white active:border-white pb-1">
+                            About Us
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/service-product" className="hover:text-white active:text-white border-b-2 border-transparent hover:border-white active:border-white pb-1">
+                            Services
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/blog" className="hover:text-white active:text-white border-b-2 border-transparent hover:border-white active:border-white pb-1">
+                            Blog
+                        </Link>
+                    </li>
                 </ul>
 
                 {/* User & Toggle */}
@@ -56,7 +70,7 @@ export default function Navbar() {
                             <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                 aria-expanded={isDropdownOpen}
-                                className="flex items-center gap-2 text-white text-sm hover:text-green-400 transition-colors cursor-pointer"
+                                className="flex items-center gap-2 text-green-300 text-sm hover:text-green-400 transition-colors cursor-pointer"
                             >
                                 Hi, {userName?.toUpperCase()}
                             </button>
@@ -102,7 +116,7 @@ export default function Navbar() {
                     <li><Link href="/blog" onClick={() => setIsOpen(false)}>Blog</Link></li>
                     {isLoggedIn ? (
                         <li>
-                            <button
+                            <Button
                                 onClick={() => {
                                     handleLogout();
                                     setIsOpen(false);
@@ -110,7 +124,7 @@ export default function Navbar() {
                                 className="w-full text-left text-red-400 cursor-pointer"
                             >
                                 Logout
-                            </button>
+                            </Button>
                         </li>
                     ) : (
                         <li>
