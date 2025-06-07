@@ -12,11 +12,8 @@ interface IBlogPost {
     thumbnail?: string;
 }
 
-interface IBlogDetailProps {
-    params: { id: string };
-}
 
-const BlogDetailPage: React.FC<IBlogDetailProps> = ({ params }) => {
+const BlogDetailPage = ({ params }: { params: { id: string } }) => {
     const router = useRouter();
     const [data, setData] = useState(null);
     const [isEditing, setIsEditing] = useState(false)
@@ -192,7 +189,7 @@ const BlogDetailPage: React.FC<IBlogDetailProps> = ({ params }) => {
 
             {/* Buttons */}
             <div className="flex gap-6">
-                { userRole === "admin" && (
+                {userRole === "admin" && (
                     <Button
                         className="bg-red-700 w-22 cursor-pointer hover:bg-red-950"
                         onClick={() => onBtnDelete(blogDetail.objectId)}
