@@ -12,40 +12,54 @@ interface IBlogPost {
     thumbnail?: string;
 }
 
-interface BlogDetailClientProps {
-    blogId: string;
-}
-
-const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
+const BlogDetailClient: React.FC<IBlogPost> = ({ objectId }) => {
     const router = useRouter();
     const [data, setData] = useState<IBlogPost | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [blogDetail, setBlogDetail] = useState<IBlogPost | null>(null);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+    const [previewThumbnail, setPreviewThumbnail] = useState<string | null>(null);
     const [userRole, setUserRole] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const role = localStorage.getItem("userRole");
+        console.log("User Role from localStorage:", role);
         setUserRole(role);
     }, []);
 
     useEffect(() => {
         const fetchBlog = async () => {
+            console.log("Fetching blog with objectId:", objectId);
+            if (!objectId) {
+                console.warn("objectId tidak tersedia.");
+                return;
+            }
+
             try {
                 const response = await apiCall.get("/api/data/BlogPost", {
-                    params: {
-                        where: `objectId = '${blogId}'`,
-                    },
+                    params: { where: `objectId = '${objectId}'` },
                 });
-                const blog = response.data[0];
+
+                console.log("Response dari API:", response.data);
+
+                const blog = response.data?.data?.[0] || response.data?.[0]; // antisipasi struktur data
+
+                if (!blog) {
+                    console.error("Blog tidak ditemukan");
+                    return;
+                }
+
                 setData(blog);
                 setBlogDetail(blog);
+                console.log("Blog detail berhasil di-set:", blog);
             } catch (error) {
-                console.error("Error fetching blog detail:", error);
+                console.error("Error saat mengambil detail blog:", error);
             }
         };
+
         fetchBlog();
-    }, [blogId]);
+    }, [objectId]);
 
     const onBtnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -53,14 +67,23 @@ const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
     };
 
     const onBtnEdit = () => setIsEditing(true);
+
     const onBtnCancel = () => {
         setBlogDetail(data);
         setThumbnailFile(null);
+        setPreviewThumbnail(null);
         setIsEditing(false);
     };
 
     const onBtnSave = async () => {
         if (!blogDetail) return;
+
+        if (!blogDetail.title.trim() || !blogDetail.content.trim()) {
+            alert("Judul dan konten tidak boleh kosong");
+            return;
+        }
+
+        setLoading(true);
 
         try {
             let uploadedThumbnailUrl = blogDetail.thumbnail;
@@ -73,7 +96,7 @@ const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
 
-                uploadedThumbnailUrl = uploadRes.data.fileURL; // Sesuaikan respons API-mu
+                uploadedThumbnailUrl = uploadRes.data.fileURL;
             }
 
             const updatedBlog = {
@@ -85,21 +108,31 @@ const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
             setData(res.data);
             setBlogDetail(res.data);
             setThumbnailFile(null);
+            setPreviewThumbnail(null);
             setIsEditing(false);
             alert("Blog berhasil diupdate");
         } catch (error) {
-            console.error("Error saving blog:", error);
+            console.error("Error saat menyimpan blog:", error);
             alert("Gagal menyimpan blog");
+        } finally {
+            setLoading(false);
         }
     };
 
     const onBtnDelete = async (id: string) => {
+        const confirmed = confirm("Yakin ingin menghapus blog ini?");
+        if (!confirmed) return;
+
+        setLoading(true);
         try {
             await apiCall.delete(`/api/data/BlogPost/${id}`);
-            alert("Blog deleted");
+            alert("Blog berhasil dihapus");
             router.push("/blog");
         } catch (error) {
-            console.error(error);
+            console.error("Error saat menghapus blog:", error);
+            alert("Gagal menghapus blog");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -110,6 +143,22 @@ const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
             </div>
         );
     }
+
+    const ActionButton = ({
+        onClick,
+        label,
+        className,
+        disabled,
+    }: {
+        onClick: () => void;
+        label: string;
+        className: string;
+        disabled?: boolean;
+    }) => (
+        <Button className={className} onClick={onClick} disabled={disabled}>
+            {label}
+        </Button>
+    );
 
     return (
         <div className="bg-[#0f0f0f] text-gray-100 py-20 px-6 md:px-24 lg:px-48 space-y-10">
@@ -125,14 +174,14 @@ const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                                 setThumbnailFile(file);
                                 if (file) {
                                     const fileURL = URL.createObjectURL(file);
-                                    setBlogDetail((prev) => (prev ? { ...prev, thumbnail: fileURL } : null));
+                                    setPreviewThumbnail(fileURL);
                                 }
                             }}
                             className="w-full p-2 rounded bg-gray-900 text-white border border-gray-700"
                         />
-                        {blogDetail.thumbnail && (
+                        {(previewThumbnail || blogDetail.thumbnail) && (
                             <img
-                                src={blogDetail.thumbnail}
+                                src={previewThumbnail || blogDetail.thumbnail}
                                 alt="Thumbnail Preview"
                                 className="w-full h-[300px] object-cover rounded-lg"
                             />
@@ -181,30 +230,37 @@ const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                 )}
             </div>
 
-            {/* Buttons */}
-            <div className="flex gap-6">
-                {userRole === "admin" && (
-                    <Button
-                        className="bg-red-700 w-22 cursor-pointer hover:bg-red-950"
-                        onClick={() => onBtnDelete(blogDetail.objectId)}
-                        disabled={isEditing}
-                    >
-                        Delete
-                    </Button>
-                )}
-
-                {!isEditing && userRole === "admin" ? (
-                    <Button className="bg-green-500 w-22 cursor-pointer hover:bg-green-900" onClick={onBtnEdit}>
-                        Edit
-                    </Button>
-                ) : (
+            {/* Action Buttons */}
+            <div className="flex gap-6 flex-wrap">
+                {userRole === "admin" && !isEditing && (
                     <>
-                        <Button className="bg-blue-500 w-22 cursor-pointer hover:bg-blue-700" onClick={onBtnSave}>
-                            Save
-                        </Button>
-                        <Button className="bg-gray-600 w-22 cursor-pointer hover:bg-gray-800" onClick={onBtnCancel}>
-                            Cancel
-                        </Button>
+                        <ActionButton
+                            label="Edit"
+                            onClick={onBtnEdit}
+                            className="bg-green-500 hover:bg-green-800"
+                        />
+                        <ActionButton
+                            label="Delete"
+                            onClick={() => onBtnDelete(blogDetail.objectId)}
+                            className="bg-red-700 hover:bg-red-950"
+                            disabled={loading}
+                        />
+                    </>
+                )}
+                {isEditing && userRole === "admin" && (
+                    <>
+                        <ActionButton
+                            label={loading ? "Saving..." : "Save"}
+                            onClick={onBtnSave}
+                            className="bg-blue-500 hover:bg-blue-700"
+                            disabled={loading}
+                        />
+                        <ActionButton
+                            label="Cancel"
+                            onClick={onBtnCancel}
+                            className="bg-gray-600 hover:bg-gray-800"
+                            disabled={loading}
+                        />
                     </>
                 )}
             </div>
