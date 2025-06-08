@@ -12,11 +12,9 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 
-interface LayoutProps {
-  children: ReactNode;
-}
 
-export default function Layout({ children }: LayoutProps) {
+
+export default function Home() {
   return (
     <div className="relative min-h-screen flex flex-col font-sans">
       {/* Video Background */}
@@ -32,7 +30,7 @@ export default function Layout({ children }: LayoutProps) {
       </div>
 
       {/* Konten utama */}
-      <main className="relative pt-20 flex-grow">{children}</main>
+      <main className="relative pt-20 flex-grow"></main>
 
       {/* Hero Section */}
       <section className="relative flex items-center justify-center min-h-[90vh] w-full px-4 bg-transparent overflow-hidden text-center">
