@@ -12,7 +12,11 @@ interface IBlogPost {
     thumbnail?: string;
 }
 
-const BlogDetailClient: React.FC<IBlogPost> = ({ objectId }) => {
+interface BlogDetailClientProps {
+    id: string;
+}
+
+const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ id }) => {
     const router = useRouter();
     const [data, setData] = useState<IBlogPost | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -24,42 +28,28 @@ const BlogDetailClient: React.FC<IBlogPost> = ({ objectId }) => {
 
     useEffect(() => {
         const role = localStorage.getItem("userRole");
-        console.log("User Role from localStorage:", role);
         setUserRole(role);
     }, []);
 
     useEffect(() => {
         const fetchBlog = async () => {
-            console.log("Fetching blog with objectId:", objectId);
-            if (!objectId) {
-                console.warn("objectId tidak tersedia.");
-                return;
-            }
-
             try {
                 const response = await apiCall.get("/api/data/BlogPost", {
-                    params: { where: `objectId = '${objectId}'` },
+                    params: { where: `objectId = '${id}'` },
                 });
-
-                console.log("Response dari API:", response.data);
-
-                const blog = response.data?.data?.[0] || response.data?.[0]; // antisipasi struktur data
-
+                const blog = response.data[0];
                 if (!blog) {
-                    console.error("Blog tidak ditemukan");
+                    console.error("Blog not found");
                     return;
                 }
-
                 setData(blog);
                 setBlogDetail(blog);
-                console.log("Blog detail berhasil di-set:", blog);
             } catch (error) {
-                console.error("Error saat mengambil detail blog:", error);
+                console.error("Error fetching blog detail:", error);
             }
         };
-
         fetchBlog();
-    }, [objectId]);
+    }, [id]);
 
     const onBtnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -67,7 +57,6 @@ const BlogDetailClient: React.FC<IBlogPost> = ({ objectId }) => {
     };
 
     const onBtnEdit = () => setIsEditing(true);
-
     const onBtnCancel = () => {
         setBlogDetail(data);
         setThumbnailFile(null);
@@ -112,7 +101,7 @@ const BlogDetailClient: React.FC<IBlogPost> = ({ objectId }) => {
             setIsEditing(false);
             alert("Blog berhasil diupdate");
         } catch (error) {
-            console.error("Error saat menyimpan blog:", error);
+            console.error("Error saving blog:", error);
             alert("Gagal menyimpan blog");
         } finally {
             setLoading(false);
@@ -129,7 +118,7 @@ const BlogDetailClient: React.FC<IBlogPost> = ({ objectId }) => {
             alert("Blog berhasil dihapus");
             router.push("/blog");
         } catch (error) {
-            console.error("Error saat menghapus blog:", error);
+            console.error("Error deleting blog:", error);
             alert("Gagal menghapus blog");
         } finally {
             setLoading(false);
