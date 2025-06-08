@@ -1,9 +1,9 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { apiCall } from "@/app/utils/apiHelper";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { on } from "events";
 
 interface IBlogPost {
     objectId: string;
@@ -14,12 +14,12 @@ interface IBlogPost {
 
 interface BlogDetailClientProps {
     blogId: string;
-  }
+}
 
-const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
+const BlogDetailClient: React.FC<BlogDetailClientProps> = ({ blogId }) => {
     const router = useRouter();
-    const [data, setData] = useState(null);
-    const [isEditing, setIsEditing] = useState(false)
+    const [data, setData] = useState<IBlogPost | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
     const [blogDetail, setBlogDetail] = useState<IBlogPost | null>(null);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [userRole, setUserRole] = useState<string | null>(null);
@@ -29,7 +29,6 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
         setUserRole(role);
     }, []);
 
-
     useEffect(() => {
         const fetchBlog = async () => {
             try {
@@ -38,9 +37,9 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                         where: `objectId = '${blogId}'`,
                     },
                 });
-                const blog = response.data[0]
+                const blog = response.data[0];
                 setData(blog);
-                setBlogDetail(blog)
+                setBlogDetail(blog);
             } catch (error) {
                 console.error("Error fetching blog detail:", error);
             }
@@ -50,15 +49,15 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
 
     const onBtnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setBlogDetail(prev => prev ? { ...prev, [name]: value } : null);
-    }
+        setBlogDetail((prev) => (prev ? { ...prev, [name]: value } : null));
+    };
 
     const onBtnEdit = () => setIsEditing(true);
     const onBtnCancel = () => {
         setBlogDetail(data);
         setThumbnailFile(null);
         setIsEditing(false);
-    }
+    };
 
     const onBtnSave = async () => {
         if (!blogDetail) return;
@@ -74,7 +73,7 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
 
-                uploadedThumbnailUrl = uploadRes.data.fileURL; // Sesuaikan struktur respons API upload-mu
+                uploadedThumbnailUrl = uploadRes.data.fileURL; // Sesuaikan respons API-mu
             }
 
             const updatedBlog = {
@@ -85,7 +84,7 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
             const res = await apiCall.put(`/api/data/BlogPost/${blogDetail.objectId}`, updatedBlog);
             setData(res.data);
             setBlogDetail(res.data);
-            setThumbnailFile(null); // Reset file setelah upload
+            setThumbnailFile(null);
             setIsEditing(false);
             alert("Blog berhasil diupdate");
         } catch (error) {
@@ -94,15 +93,13 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
         }
     };
 
-
-
     const onBtnDelete = async (id: string) => {
         try {
             await apiCall.delete(`/api/data/BlogPost/${id}`);
             alert("Blog deleted");
             router.push("/blog");
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 
@@ -118,7 +115,7 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
         <div className="bg-[#0f0f0f] text-gray-100 py-20 px-6 md:px-24 lg:px-48 space-y-10">
             {/* Thumbnail */}
             <div className="overflow-hidden rounded-2xl shadow-2xl">
-                {isEditing ? userRole === "admin" && (
+                {isEditing && userRole === "admin" ? (
                     <div className="space-y-4">
                         <input
                             type="file"
@@ -126,17 +123,13 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                             onChange={(e) => {
                                 const file = e.target.files?.[0] || null;
                                 setThumbnailFile(file);
-
-                                // Optional: preview langsung
                                 if (file) {
                                     const fileURL = URL.createObjectURL(file);
-                                    setBlogDetail(prev => prev ? { ...prev, thumbnail: fileURL } : null);
+                                    setBlogDetail((prev) => (prev ? { ...prev, thumbnail: fileURL } : null));
                                 }
                             }}
                             className="w-full p-2 rounded bg-gray-900 text-white border border-gray-700"
                         />
-
-                        {/* Preview Thumbnail */}
                         {blogDetail.thumbnail && (
                             <img
                                 src={blogDetail.thumbnail}
@@ -156,12 +149,11 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                         </figure>
                     )
                 )}
-
             </div>
 
             {/* Title */}
             <h1 className="text-4xl md:text-6xl font-semibold text-white leading-tight tracking-wide">
-                {isEditing ? userRole === "admin" && (
+                {isEditing && userRole === "admin" ? (
                     <input
                         type="text"
                         name="title"
@@ -176,7 +168,7 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
 
             {/* Content */}
             <div className="text-lg md:text-xl font-light leading-relaxed text-gray-300 whitespace-pre-line tracking-wide">
-                {isEditing ? userRole === "admin" && (
+                {isEditing && userRole === "admin" ? (
                     <textarea
                         name="content"
                         value={blogDetail.content}
@@ -201,26 +193,16 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
                     </Button>
                 )}
 
-
-                {!isEditing ? userRole === "admin" && (
-                    <Button
-                        className="bg-green-500 w-22 cursor-pointer hover:bg-green-900"
-                        onClick={onBtnEdit}
-                    >
+                {!isEditing && userRole === "admin" ? (
+                    <Button className="bg-green-500 w-22 cursor-pointer hover:bg-green-900" onClick={onBtnEdit}>
                         Edit
                     </Button>
                 ) : (
                     <>
-                        <Button
-                            className="bg-blue-500 w-22 cursor-pointer hover:bg-blue-700"
-                            onClick={onBtnSave}
-                        >
+                        <Button className="bg-blue-500 w-22 cursor-pointer hover:bg-blue-700" onClick={onBtnSave}>
                             Save
                         </Button>
-                        <Button
-                            className="bg-gray-600 w-22 cursor-pointer hover:bg-gray-800"
-                            onClick={onBtnCancel}
-                        >
+                        <Button className="bg-gray-600 w-22 cursor-pointer hover:bg-gray-800" onClick={onBtnCancel}>
                             Cancel
                         </Button>
                     </>
@@ -230,4 +212,4 @@ const BlogDetailPage: React.FC<BlogDetailClientProps> = ({ blogId }) => {
     );
 };
 
-export default BlogDetailPage;
+export default BlogDetailClient;
