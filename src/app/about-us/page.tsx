@@ -1,11 +1,12 @@
 "use client";
+import Image from "next/image";
 
 export default function AboutUs() {
     return (
         <section>
             {/* Hero Section */}
             <div
-                className="relative w-full bg-cover bg-center py-20 md:py-28"
+                className="relative w-full bg-cover bg-center py-20 md:py-28 priority"
                 style={{ backgroundImage: 'url("/assets/2035.jpg")' }}
             >
                 {/* Dark overlay */}
@@ -14,7 +15,9 @@ export default function AboutUs() {
                 <div className="relative max-w-7xl mx-auto px-8 md:px-12 flex flex-col md:flex-row items-center gap-14 rounded-3xl min-h-[450px] md:min-h-[550px]">
                     <div className="w-full text-center md:text-left text-white font-serif tracking-wide max-w-4xl mx-auto md:mx-0 space-y-8">
                         <h1 className="text-4xl md:text-6xl font-extrabold uppercase drop-shadow-lg text-emerald-400">
-                            About PT Farmer Indonesia
+                            About 
+                            <br />
+                            <span className="text-4xl">PT Farmer Indonesia</span>
                         </h1>
                         <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line drop-shadow-md text-gray-200">
                             PT Farmer Indonesia didirikan pada tahun 2018 oleh sekelompok inovator
@@ -52,40 +55,40 @@ export default function AboutUs() {
                             {
                                 name: "Agus Santoso",
                                 role: "Agricultural Engineer",
-                                img: "https://randomuser.me/api/portraits/men/10.jpg",
+                                Image: "https://randomuser.me/api/portraits/men/10.jpg",
                             },
                             {
                                 name: "Siti Nurhaliza",
                                 role: "Farm Data Analyst",
-                                img: "https://randomuser.me/api/portraits/women/11.jpg",
+                                Image: "https://randomuser.me/api/portraits/women/11.jpg",
                             },
                             {
                                 name: "Budi Prasetyo",
                                 role: "IoT Specialist",
-                                img: "https://randomuser.me/api/portraits/men/12.jpg",
+                                Image: "https://randomuser.me/api/portraits/men/12.jpg",
                             },
                             {
                                 name: "Dewi Lestari",
                                 role: "Agronomist",
-                                img: "https://randomuser.me/api/portraits/women/13.jpg",
+                                Image: "https://randomuser.me/api/portraits/women/13.jpg",
                             },
                             {
                                 name: "Rizal Mahendra",
                                 role: "Crop Scientist",
-                                img: "https://randomuser.me/api/portraits/men/14.jpg",
+                                Image: "https://randomuser.me/api/portraits/men/14.jpg",
                             },
                             {
                                 name: "Yuni Astuti",
                                 role: "Farm Automation Technician",
-                                img: "https://randomuser.me/api/portraits/women/15.jpg",
+                                Image: "https://randomuser.me/api/portraits/women/15.jpg",
                             },
-                        ].map(({ name, role, img }) => (
+                        ].map(({ name, role, Image }) => (
                             <div
                                 key={name}
                                 className="bg-white shadow-lg rounded-3xl overflow-hidden max-w-[380px] mx-auto cursor-pointer transform transition duration-300 hover:scale-105"
                             >
                                 <img
-                                    src={img}
+                                    src={Image}
                                     alt={name}
                                     className="w-full h-[360px] object-cover rounded-t-3xl"
                                     loading="lazy"

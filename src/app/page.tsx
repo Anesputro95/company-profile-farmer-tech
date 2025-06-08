@@ -10,6 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
           loop
           playsInline
           className="w-full h-[100vh] md:h-[100vh] object-cover brightness-50 "
+          
         >
           <source src="/video/bg.mp4" type="video/mp4" />
         </video>
@@ -73,15 +75,15 @@ export default function Home() {
 
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {[{
-            src: "/assets/logo-1.png",
+            src: "/assets/logo-1.webp",
             alt: "Drone Pertanian",
             text: "Membantu menyemprotkan pestisida dan pupuk serta mengawasi lahan secara otomatis.",
           }, {
-            src: "/assets/logo-2.png",
+            src: "/assets/logo-2.webp",
             alt: "Sensor Lahan",
             text: "Data real-time seperti kelembaban tanah, suhu, dan cuaca terkini.",
           }, {
-            src: "/assets/logo-3.png",
+            src: "/assets/logo-3.webp",
             alt: "Aplikasi Pintar",
             text: "Membantu perencanaan tanam, monitoring panen, dan akses pelatihan.",
           }].map(({ src, alt, text }) => (
@@ -89,7 +91,15 @@ export default function Home() {
               key={alt}
               className="bg-green-900 backdrop-blur-lg rounded-3xl p-8 text-white shadow-2xl hover:scale-105 transition-transform duration-300"
             >
-              <img src={src} alt={alt} className="w-16 h-16 mx-auto mb-6" />
+              <Image
+                src={src}
+                alt={alt}
+                width={64}
+                height={64}
+                className="w-16 h-16 mx-auto mb-6"
+                priority
+              />
+
               <p className="text-md leading-relaxed text-white/90">{text}</p>
             </div>
           ))}
@@ -104,6 +114,7 @@ export default function Home() {
               src="https://www.youtube.com/embed/Qfozqrom7Bk"
               title="YouTube video player"
               className="w-full h-full"
+              loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             ></iframe>
@@ -143,8 +154,14 @@ export default function Home() {
                 className="p-4 min-w-full md:min-w-0"
                 style={{ scrollSnapAlign: "center" }}
               >
-                <div className="bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center space-y-4 text-gray-800">
-                  <img src={avatar} alt={`Avatar ${idx + 1}`} className="w-20 h-20 rounded-full object-cover shadow-md" />
+                <div className="bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center space-y-4 text-gray-800 ">
+                  <Image
+                    src={avatar}
+                    alt={`Avatar ${idx + 1}`}
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 rounded-full object-cover shadow-md"
+                  />
                   <p className="italic">“{text}”</p>
                   <h4 className="text-emerald-700 font-semibold">{name}</h4>
                 </div>
