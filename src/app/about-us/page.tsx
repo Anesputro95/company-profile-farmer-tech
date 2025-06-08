@@ -33,68 +33,70 @@ export default function AboutUs() {
             </div>
 
             {/* What We Do Section */}
-            <div className="max-w-7xl mx-auto px-8 md:px-12 py-20 flex flex-col gap-10 text-center">
-                <h2 className="text-3xl md:text-4xl font-serif font-semibold uppercase text-emerald-600 drop-shadow-md">
-                    What We Do
-                </h2>
-                <p className="max-w-3xl mx-auto text-gray-500 font-light text-base md:text-lg leading-relaxed tracking-wide">
-                    Kami adalah perusahaan teknologi pertanian yang berfokus pada inovasi untuk
-                    mendukung petani meningkatkan produktivitas dan efisiensi usaha tani mereka.
-                    Dengan memadukan teknologi modern seperti IoT, drone, dan aplikasi digital,
-                    kami hadir untuk membantu solusi pertanian yang berkelanjutan dan ramah
-                    lingkungan.
-                </p>
+            <div className="bg-green-900">
+                <div className="max-w-7xl mx-auto px-8 py-20 flex flex-col gap-10 text-center">
+                    <h2 className="text-3xl md:text-7xl font-serif font-semibold uppercase text-emerald-600 drop-shadow-md">
+                        What We Do
+                    </h2>
+                    <p className="max-w-3xl mx-auto text-white font-light text-base md:text-lg leading-relaxed tracking-wide">
+                        Kami adalah perusahaan teknologi pertanian yang berfokus pada inovasi untuk
+                        mendukung petani meningkatkan produktivitas dan efisiensi usaha tani mereka.
+                        Dengan memadukan teknologi modern seperti IoT, drone, dan aplikasi digital,
+                        kami hadir untuk membantu solusi pertanian yang berkelanjutan dan ramah
+                        lingkungan.
+                    </p>
 
-                {/* Card Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-center">
-                    {[
-                        {
-                            name: "Agus Santoso",
-                            role: "Agricultural Engineer",
-                            img: "https://randomuser.me/api/portraits/men/10.jpg",
-                        },
-                        {
-                            name: "Siti Nurhaliza",
-                            role: "Farm Data Analyst",
-                            img: "https://randomuser.me/api/portraits/women/11.jpg",
-                        },
-                        {
-                            name: "Budi Prasetyo",
-                            role: "IoT Specialist",
-                            img: "https://randomuser.me/api/portraits/men/12.jpg",
-                        },
-                        {
-                            name: "Dewi Lestari",
-                            role: "Agronomist",
-                            img: "https://randomuser.me/api/portraits/women/13.jpg",
-                        },
-                        {
-                            name: "Rizal Mahendra",
-                            role: "Crop Scientist",
-                            img: "https://randomuser.me/api/portraits/men/14.jpg",
-                        },
-                        {
-                            name: "Yuni Astuti",
-                            role: "Farm Automation Technician",
-                            img: "https://randomuser.me/api/portraits/women/15.jpg",
-                        },
-                    ].map(({ name, role, img }) => (
-                        <div
-                            key={name}
-                            className="bg-white shadow-lg rounded-3xl overflow-hidden max-w-[380px] mx-auto cursor-pointer transform transition duration-300 hover:scale-105"
-                        >
-                            <img
-                                src={img}
-                                alt={name}
-                                className="w-full h-[360px] object-cover rounded-t-3xl"
-                                loading="lazy"
-                            />
-                            <div className="p-6 text-center">
-                                <h3 className="text-2xl font-semibold text-gray-800">{name}</h3>
-                                <p className="text-emerald-600 font-medium mt-1">{role}</p>
+                    {/* Card Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-center">
+                        {[
+                            {
+                                name: "Agus Santoso",
+                                role: "Agricultural Engineer",
+                                img: "https://randomuser.me/api/portraits/men/10.jpg",
+                            },
+                            {
+                                name: "Siti Nurhaliza",
+                                role: "Farm Data Analyst",
+                                img: "https://randomuser.me/api/portraits/women/11.jpg",
+                            },
+                            {
+                                name: "Budi Prasetyo",
+                                role: "IoT Specialist",
+                                img: "https://randomuser.me/api/portraits/men/12.jpg",
+                            },
+                            {
+                                name: "Dewi Lestari",
+                                role: "Agronomist",
+                                img: "https://randomuser.me/api/portraits/women/13.jpg",
+                            },
+                            {
+                                name: "Rizal Mahendra",
+                                role: "Crop Scientist",
+                                img: "https://randomuser.me/api/portraits/men/14.jpg",
+                            },
+                            {
+                                name: "Yuni Astuti",
+                                role: "Farm Automation Technician",
+                                img: "https://randomuser.me/api/portraits/women/15.jpg",
+                            },
+                        ].map(({ name, role, img }) => (
+                            <div
+                                key={name}
+                                className="bg-white shadow-lg rounded-3xl overflow-hidden max-w-[380px] mx-auto cursor-pointer transform transition duration-300 hover:scale-105"
+                            >
+                                <img
+                                    src={img}
+                                    alt={name}
+                                    className="w-full h-[360px] object-cover rounded-t-3xl"
+                                    loading="lazy"
+                                />
+                                <div className="p-6 text-center">
+                                    <h3 className="text-2xl font-semibold text-gray-800">{name}</h3>
+                                    <p className="text-emerald-600 font-medium mt-1">{role}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
